@@ -27,6 +27,6 @@ jobs:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}'
           channelId: live
-          projectId: college-katta  # Replace with your actual Firebase project ID
+          projectId: college-katta-a1b2c
         env:
           FIREBASE_CLI_PREVIEWS: hostingchannels

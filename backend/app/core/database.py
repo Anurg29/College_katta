@@ -6,8 +6,14 @@ from typing import AsyncGenerator
 from app.core.config import settings
 
 # MySQL Database
+# MySQL Database
+# Fix for Railway/Cloud: Ensure we use pymysql driver
+db_url = settings.DATABASE_URL
+if db_url and db_url.startswith("mysql://"):
+    db_url = db_url.replace("mysql://", "mysql+pymysql://", 1)
+
 engine = create_engine(
-    settings.DATABASE_URL,
+    db_url,
     pool_pre_ping=True,
     pool_size=10,
     max_overflow=20,

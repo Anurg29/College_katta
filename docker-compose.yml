@@ -1,0 +1,78 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: techkatta_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: Anurag*29
+      MYSQL_DATABASE: techkatta
+      MYSQL_USER: techkatta_user
+      MYSQL_PASSWORD: techkatta_pass
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - techkatta_network
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      timeout: 20s
+      retries: 10
+
+  mongodb:
+    image: mongo:6.0
+    container_name: techkatta_mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: adminpass
+      MONGO_INITDB_DATABASE: techkatta
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - techkatta_network
+
+  redis:
+    image: redis:7-alpine
+    container_name: techkatta_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - techkatta_network
+
+  backend:
+    build: ./backend
+    container_name: techkatta_backend
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    volumes:
+      - ./backend:/app
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=mysql+pymysql://techkatta_user:techkatta_pass@mysql:3306/techkatta
+      - MONGODB_URL=mongodb://admin:adminpass@mongodb:27017
+      - REDIS_URL=redis://redis:6379
+      - SECRET_KEY=your-secret-key-change-in-production-min-32-chars
+    depends_on:
+      mysql:
+        condition: service_healthy
+      mongodb:
+        condition: service_started
+      redis:
+        condition: service_started
+    networks:
+      - techkatta_network
+
+volumes:
+  mysql_data:
+  mongo_data:
+  redis_data:
+
+
+networks:
+  techkatta_network:
+    driver: bridge

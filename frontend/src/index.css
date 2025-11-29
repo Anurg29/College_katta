@@ -1,0 +1,117 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    body {
+        @apply bg-white dark:bg-dark-950 text-dark-900 dark:text-dark-50;
+        font-family: 'Inter', system-ui, sans-serif;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        @apply font-semibold;
+    }
+}
+
+@layer components {
+    .btn {
+        @apply px-4 py-2 rounded-lg font-medium transition-all duration-200;
+        @apply focus:outline-none focus:ring-2 focus:ring-offset-2;
+    }
+
+    .btn-primary {
+        @apply bg-primary-600 text-white hover:bg-primary-700;
+        @apply focus:ring-primary-500;
+    }
+
+
+    .btn-secondary {
+        @apply bg-dark-200 dark:bg-dark-700 text-dark-900 dark:text-dark-50;
+        @apply hover:bg-dark-300 dark:hover:bg-dark-600;
+        @apply focus:ring-dark-500;
+    }
+
+    .btn-outline {
+        @apply border-2 border-primary-600 text-primary-600;
+        @apply hover:bg-primary-50 dark:hover:bg-primary-900/20;
+        @apply focus:ring-primary-500;
+    }
+
+    .input {
+        @apply w-full px-4 py-2 rounded-lg border border-dark-300 dark:border-dark-700;
+        @apply bg-white dark:bg-dark-800 text-dark-900 dark:text-dark-50;
+        @apply focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent;
+        @apply transition-all duration-200;
+    }
+
+    .card {
+        @apply bg-white dark:bg-dark-900 rounded-xl shadow-lg;
+        @apply border border-dark-200 dark:border-dark-800;
+        @apply transition-all duration-200;
+    }
+
+    .card-hover {
+        @apply hover:shadow-xl hover:-translate-y-1;
+    }
+}
+
+@layer utilities {
+    .text-gradient {
+        @apply bg-clip-text text-transparent bg-gradient-to-r from-primary-600 to-purple-600;
+    }
+
+    .glass {
+        @apply bg-white/10 dark:bg-dark-900/10 backdrop-blur-lg;
+        @apply border border-white/20 dark:border-dark-800/20;
+    }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    @apply bg-dark-100 dark:bg-dark-900;
+}
+
+::-webkit-scrollbar-thumb {
+    @apply bg-dark-300 dark:bg-dark-700 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    @apply bg-dark-400 dark:bg-dark-600;
+}
+
+/* Animations */
+@keyframes shimmer {
+    0% {
+        background-position: -1000px 0;
+    }
+
+    100% {
+        background-position: 1000px 0;
+    }
+}
+
+.skeleton {
+    animation: shimmer 2s infinite linear;
+    background: linear-gradient(to right,
+            #f0f0f0 4%,
+            #e0e0e0 25%,
+            #f0f0f0 36%);
+    background-size: 1000px 100%;
+}
+
+.dark .skeleton {
+    background: linear-gradient(to right,
+            #1e293b 4%,
+            #334155 25%,
+            #1e293b 36%);
+}

@@ -8,7 +8,7 @@ services:
       MYSQL_USER: techkatta_user
       MYSQL_PASSWORD: techkatta_pass
     ports:
-      - "3306:3306"
+      - "3307:3306" # Changed to 3307 to avoid conflict with local MySQL
     volumes:
       - mysql_data:/var/lib/mysql
     networks:
@@ -26,7 +26,7 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: adminpass
       MONGO_INITDB_DATABASE: techkatta
     ports:
-      - "27017:27017"
+      - "27018:27017" # Changed to 27018 to avoid conflict with local MongoDB
     volumes:
       - mongo_data:/data/db
     networks:
@@ -36,7 +36,7 @@ services:
     image: redis:7-alpine
     container_name: techkatta_redis
     ports:
-      - "6379:6379"
+      - "6380:6379" # Changed to 6380 to avoid conflict with local Redis
     volumes:
       - redis_data:/data
     networks:
@@ -54,6 +54,7 @@ services:
       - DATABASE_URL=mysql+pymysql://techkatta_user:techkatta_pass@mysql:3306/techkatta
       - MONGODB_URL=mongodb://admin:adminpass@mongodb:27017
       - REDIS_URL=redis://redis:6379
+      - DEBUG=True
       - SECRET_KEY=your-secret-key-change-in-production-min-32-chars
     depends_on:
       mysql:

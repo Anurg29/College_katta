@@ -6,19 +6,42 @@ from typing import AsyncGenerator
 from app.core.config import settings
 
 # MySQL Database
-# MySQL Database
 # Fix for Railway/Cloud: Ensure we use pymysql driver
 db_url = settings.DATABASE_URL
-if db_url and db_url.startswith("mysql://"):
-    db_url = db_url.replace("mysql://", "mysql+pymysql://", 1)
 
-engine = create_engine(
-    db_url,
-    pool_pre_ping=True,
-    pool_size=10,
-    max_overflow=20,
-    echo=settings.DEBUG
-)
+# Support for different database types
+if db_url:
+    if db_url.startswith("mysql://"):
+        db_url = db_url.replace("mysql://", "mysql+pymysql://", 1)
+        engine = create_engine(
+            db_url,
+            pool_pre_ping=True,
+            pool_size=10,
+            max_overflow=20,
+            echo=settings.DEBUG
+        )
+    elif db_url.startswith("sqlite"):
+        # SQLite configuration for local development
+        engine = create_engine(
+            db_url,
+            connect_args={"check_same_thread": False},
+            echo=settings.DEBUG
+        )
+    else:
+        # Default configuration for other databases
+        engine = create_engine(
+            db_url,
+            pool_pre_ping=True,
+            echo=settings.DEBUG
+        )
+else:
+    # Fallback to SQLite if no DATABASE_URL is provided
+    print("⚠️  No DATABASE_URL found, using SQLite for local development")
+    engine = create_engine(
+        "sqlite:///./techkatta.db",
+        connect_args={"check_same_thread": False},
+        echo=settings.DEBUG
+    )
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()

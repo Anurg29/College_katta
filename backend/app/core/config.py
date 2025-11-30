@@ -17,10 +17,10 @@ class Settings(BaseSettings):
     REFRESH_TOKEN_EXPIRE_DAYS: int = 7
     
     # Database - MySQL
-    DATABASE_URL: str
+    DATABASE_URL: str = "sqlite:///./techkatta.db"  # Default to SQLite for easy local dev
     
     # Database - MongoDB
-    MONGODB_URL: str
+    MONGODB_URL: str = "mongodb://localhost:27017"
     MONGODB_DB_NAME: str = "techkatta"
     
     # Redis
